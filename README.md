@@ -1,8 +1,31 @@
 # Energy Consumption Data Engineering Pipeline
 
-**Status:** Starter project — local PySpark ETL implemented. Airflow, BigQuery, and dashboards are planned, not yet implemented.
-
+**Status:** Completed local PySpark ETL pipeline processing over 2.07 million household electricity readings. Includes timestamp normalization, deduplication, missing-value validation, daily aggregations, Parquet output, and CSV data-quality reporting. Apache Airflow, BigQuery, and dashboards are planned enhancements.
 This learning project processes household electricity usage measurements using Apache Spark (PySpark), performs timestamp parsing and data-quality checks, and writes daily Parquet summaries and a CSV quality report.
+
+## Processing Results
+
+The local Apache Spark ETL pipeline processed the UCI Individual Household Electric Power Consumption dataset.
+
+| Metric | Result |
+|---|---:|
+| Records after deduplication | 2,075,019 |
+| Valid power readings | 2,049,040 |
+| Missing power readings | 25,979 |
+| Processing framework | Apache Spark / PySpark 3.5.9 |
+| Output formats | Parquet and CSV |
+
+### Key Engineering Features
+
+- Implemented distributed data transformations using PySpark DataFrames.
+- Parsed and normalized electricity measurement timestamps.
+- Removed duplicate timestamp records.
+- Validated power and voltage measurements.
+- Aggregated daily average and peak active power.
+- Generated Parquet datasets for downstream analytics.
+- Produced CSV data-quality summaries to identify missing readings.
+
+**Project scope:** Household electricity analytics using the UCI dataset. Cloud deployment, workflow orchestration, and dashboards are planned future enhancements.
 
 ## Dataset
 
