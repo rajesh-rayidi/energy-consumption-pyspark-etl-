@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+outputs/
+data/household_power_consumption.txt
+data/*.zip
+.env
+*.log
+src/transform+backup/py
