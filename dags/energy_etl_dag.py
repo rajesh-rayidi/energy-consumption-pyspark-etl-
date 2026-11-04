@@ -14,6 +14,7 @@ with DAG(
         task_id="run_pyspark_etl",
         retries = 2,
         retry_delay = pendulum.duration(minutes=5),
+        execution_timeout = pendulum.duration(minutes=15),
         bash_command=(
             "export PYSPARK_PYTHON=/home/trive/projects/energy-consumption-pipeline/.venv/bin/python; "
             "/home/trive/projects/energy-consumption-pipeline/.venv/bin/python "
