@@ -5,8 +5,8 @@ from airflow.providers.standard.operators.bash import BashOperator
 
 with DAG(
     dag_id="energy_consumption_etl",
-    start_date=pendulum.datetime(2026, 11, 1, tz="UTC"),
-    schedule=None,
+    start_date=pendulum.datetime(2026, 11, 1, tz="America/Los_Angeles"),
+    schedule="0 8 * * *",
     catchup=False,
     tags=["energy", "pyspark"],
 ) as dag:
