@@ -12,6 +12,8 @@ with DAG(
 ) as dag:
     run_etl = BashOperator(
         task_id="run_pyspark_etl",
+        retries = 2,
+        retry_delay = pendulum.duration(minutes=5),
         bash_command=(
             "export PYSPARK_PYTHON=/home/trive/projects/energy-consumption-pipeline/.venv/bin/python; "
             "/home/trive/projects/energy-consumption-pipeline/.venv/bin/python "
