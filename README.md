@@ -81,3 +81,23 @@ python src\transform.py
 - [ ] Export curated data to BigQuery
 - [ ] Create dashboard of usage and missing readings
 - [ ] Benchmark and document pipeline runtime
+
+
+## Electricity Consumption Analytics Dashboard
+
+This dashboard was developed using Google Data Studio
+and connected to Google BigQuery.
+
+### Key Metrics
+- Average household power demand: approximately 1.1 kW
+- Peak power demand: 11.1 kW
+- Missing power readings: 25,979
+
+### Dashboard Preview
+
+![Electricity Consumption Dashboard](energy_dashboard.png)
+
+### Data Engineering Architecture
+
+PySpark ETL → Apache Airflow → Google Cloud Storage → BigQuery → Data Studio
+
