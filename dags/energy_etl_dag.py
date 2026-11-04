@@ -43,7 +43,7 @@ with DAG(
             "bq load --replace "
             "--source_format=PARQUET "
             "--location=us-west1 "
-            "energy_analytics.daily_energy_test "
+            "energy_analytics.daily_energy_consumption "
             "gs://energy-etl-rajesh-2026/latest_energy/current.parquet"
         ),
     )
