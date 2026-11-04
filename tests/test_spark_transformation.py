@@ -91,3 +91,23 @@ def test_daily_energy_aggregation():
         assert abs(result["energy_kwh"] - 0.15) < 0.000001
     finally:
         spark.stop()
+
+def test_clean_readings_function():
+    from src.cleaning import clean_readings
+
+    spark = SparkSession.builder.master("local[1]").getOrCreate()
+    try:
+        data = [
+            ("16/12/2006", "17:24:00", "2.5", "230"),
+            ("16/12/2006", "17:24:00", "2.5", "230"),
+            ("16/12/2006", "17:25:00", "?", "231"),
+        ]
+        columns = ["Date", "Time", "Global_active_power", "Voltage"]
+
+        raw = spark.createDataFrame(data, columns)
+        clean = clean_readings(raw)
+
+        assert clean.count() == 2
+        assert clean.filter("active_power_kw IS NULL").count() == 1
+    finally:
+        spark.stop()

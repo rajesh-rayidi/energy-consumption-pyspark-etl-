@@ -6,6 +6,7 @@ Outputs: outputs/daily_energy/ (Parquet), outputs/quality_report/ (CSV)
 from pathlib import Path
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
+from cleaning import clean_readings
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUT = ROOT / 'data' / 'household_power_consumption.txt'
