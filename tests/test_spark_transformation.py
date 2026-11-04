@@ -66,3 +66,28 @@ def test_missing_power_readings():
         assert cleaned.filter(col("power_kw").isNotNull()).count() == 2
     finally:
         spark.stop()
+
+def test_daily_energy_aggregation():
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col, sum as spark_sum
+
+    spark = SparkSession.builder.master("local[1]").appName("DailyEnergyTest").getOrCreate()
+
+    try:
+        data = [
+            ("2026-01-01", 2.0),
+            ("2026-01-01", 3.0),
+            ("2026-01-01", 4.0),
+        ]
+
+        df = spark.createDataFrame(data, ["date", "power_kw"])
+
+        daily = df.groupBy("date").agg(
+            (spark_sum(col("power_kw")) / 60).alias("energy_kwh")
+        )
+
+        result = daily.first()
+
+        assert abs(result["energy_kwh"] - 0.15) < 0.000001
+    finally:
+        spark.stop()
