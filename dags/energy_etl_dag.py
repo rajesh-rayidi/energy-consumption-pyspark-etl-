@@ -31,8 +31,21 @@ with DAG(
         bash_command=(
             'PROJECT_DIR="${ENERGY_PROJECT_DIR:-$HOME/projects/energy-consumption-pipeline}"; '
             'gcloud storage cp "$PROJECT_DIR"/outputs/daily_energy/part-*.parquet '
-            'gs://energy-etl-rajesh-2026/daily_energy/'
+            'gs://energy-etl-rajesh-2026/latest_energy/current.parquet'
         ),
     )
 
-    run_etl >> upload_gcs
+    load_bigquery = BashOperator(
+        task_id="load_to_bigquery",
+        retries=2,
+        retry_delay=pendulum.duration(minutes=5),
+        bash_command=(
+            "bq load --replace "
+            "--source_format=PARQUET "
+            "--location=us-west1 "
+            "energy_analytics.daily_energy_test "
+            "gs://energy-etl-rajesh-2026/latest_energy/current.parquet"
+        ),
+    )
+
+    run_etl >> upload_gcs >> load_bigquery
