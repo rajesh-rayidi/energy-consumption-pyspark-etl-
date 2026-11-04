@@ -40,3 +40,29 @@ def test_timestamp_parsing():
         assert result.filter(col("timestamp").isNotNull()).count() == 1
     finally:
         spark.stop()
+
+def test_missing_power_readings():
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col, when
+
+    spark = SparkSession.builder.master("local[1]").appName("MissingValuesTest").getOrCreate()
+
+    try:
+        data = [
+            ("2.5",),
+            ("?",),
+            ("3.0",),
+        ]
+
+        df = spark.createDataFrame(data, ["power"])
+
+        cleaned = df.withColumn(
+            "power_kw",
+            when(col("power") == "?", None)
+            .otherwise(col("power").cast("double"))
+        )
+
+        assert cleaned.filter(col("power_kw").isNull()).count() == 1
+        assert cleaned.filter(col("power_kw").isNotNull()).count() == 2
+    finally:
+        spark.stop()
