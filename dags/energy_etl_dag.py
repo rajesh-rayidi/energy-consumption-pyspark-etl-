@@ -16,8 +16,8 @@ with DAG(
         retry_delay = pendulum.duration(minutes=5),
         execution_timeout = pendulum.duration(minutes=15),
         bash_command=(
-            "export PYSPARK_PYTHON=/home/trive/projects/energy-consumption-pipeline/.venv/bin/python; "
-            "/home/trive/projects/energy-consumption-pipeline/.venv/bin/python "
-            "/home/trive/projects/energy-consumption-pipeline/src/transform.py"
+            'PROJECT_DIR="${ENERGY_PROJECT_DIR:-$HOME/projects/energy-consumption-pipeline}"; '
+            'export PYSPARK_PYTHON="$PROJECT_DIR/.venv/bin/python"; '
+            '"$PROJECT_DIR/.venv/bin/python" "$PROJECT_DIR/src/transform.py"'
         ),
     )
