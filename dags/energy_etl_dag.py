@@ -21,3 +21,18 @@ with DAG(
             '"$PROJECT_DIR/.venv/bin/python" "$PROJECT_DIR/src/transform.py"'
         ),
     )
+
+
+
+    upload_gcs = BashOperator(
+        task_id="upload_to_gcs",
+        retries=2,
+        retry_delay=pendulum.duration(minutes=5),
+        bash_command=(
+            'PROJECT_DIR="${ENERGY_PROJECT_DIR:-$HOME/projects/energy-consumption-pipeline}"; '
+            'gcloud storage cp "$PROJECT_DIR"/outputs/daily_energy/part-*.parquet '
+            'gs://energy-etl-rajesh-2026/daily_energy/'
+        ),
+    )
+
+    run_etl >> upload_gcs
