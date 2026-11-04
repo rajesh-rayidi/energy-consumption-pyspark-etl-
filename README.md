@@ -1,7 +1,7 @@
 # Energy Consumption Data Engineering Pipeline
 
-**Status:** Completed local PySpark ETL pipeline processing over 2.07 million household electricity readings. Includes timestamp normalization, deduplication, missing-value validation, daily aggregations, Parquet output, and CSV data-quality reporting. Apache Airflow, BigQuery, and dashboards are planned enhancements.
-This learning project processes household electricity usage measurements using Apache Spark (PySpark), performs timestamp parsing and data-quality checks, and writes daily Parquet summaries and a CSV quality report.
+**Status:**  End-to-End Data Engineering Pipeline Implemented
+Developed a household electricity consumption analytics pipeline using Apache PySpark, Apache Airflow, Google Cloud Storage, Google BigQuery, and Google Data Studio.Processed more than 2.07 million electricity readings, implemented timestamp normalization, deduplication, missing-value validation, and daily aggregations, and stored analytics-ready data in Parquet format.Orchestrated the local PySpark ETL workflow with Apache Airflow, uploaded processed data to Google Cloud Storage, analyzed the results with BigQuery SQL, and developed an interactive dashboard displaying electricity demand patterns and data-quality metrics.
 
 ## Processing Results
 
