@@ -7,6 +7,7 @@ from pathlib import Path
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from cleaning import clean_readings
+from aggregation import aggregate_daily
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUT = ROOT / 'data' / 'household_power_consumption.txt'
@@ -28,15 +29,7 @@ def main():
             .filter(F.col('reading_ts').isNotNull())
             .dropDuplicates(['reading_ts']))
 
-        daily = (clean.withColumn('date', F.to_date('reading_ts'))
-            .groupBy('date')
-            .agg(F.count('*').alias('total_readings'),
-                 F.count('active_power_kw').alias('valid_power_readings'),
-                 F.avg('active_power_kw').alias('avg_active_power_kw'),
-                 F.max('active_power_kw').alias('peak_active_power_kw'),
-                 F.avg('voltage_v').alias('avg_voltage_v'))
-            .withColumn('missing_power_readings', F.col('total_readings') - F.col('valid_power_readings'))
-            .orderBy('date'))
+        daily = aggregate_daily(clean)
         quality = (clean.agg(
             F.count('*').alias('total_rows_after_dedup'),
             F.count('active_power_kw').alias('rows_with_valid_power'),

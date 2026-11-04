@@ -111,3 +111,36 @@ def test_clean_readings_function():
         assert clean.filter("active_power_kw IS NULL").count() == 1
     finally:
         spark.stop()
+
+def test_aggregate_daily_function():
+    from src.aggregation import aggregate_daily
+    from pyspark.sql import functions as F
+
+    spark = SparkSession.builder.master("local[1]").getOrCreate()
+
+    try:
+        data = [
+            ("2026-01-01 10:00:00", 2.0, 230.0),
+            ("2026-01-01 10:01:00", 4.0, 232.0),
+        ]
+
+        df = spark.createDataFrame(
+            data,
+            ["timestamp_text", "active_power_kw", "voltage_v"]
+        )
+
+        df = df.withColumn(
+            "reading_ts",
+            F.to_timestamp("timestamp_text")
+        )
+
+        result = aggregate_daily(df).first()
+
+        assert result["total_readings"] == 2
+        assert result["valid_power_readings"] == 2
+        assert result["avg_active_power_kw"] == 3.0
+        assert result["peak_active_power_kw"] == 4.0
+        assert result["avg_voltage_v"] == 231.0
+        assert result["missing_power_readings"] == 0
+    finally:
+        spark.stop()
